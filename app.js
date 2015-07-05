@@ -4,16 +4,20 @@
 var DEFAULT_ROUTE = 'about';
 
 var template = document.querySelector('#t');
+var ajax, pages, scaffold;
+var cache = {};
 
 template.pages = [
-  {name: 'About', hash: 'about'},
-  {name: 'Resume', hash: 'resume'},
-  {name: 'Blog', hash: 'blog'},
-  {name: 'Bookmarks', hash: 'bookmarks'},
-  {name: 'Contact', hash: 'contact'}
+  {name: 'About', hash: 'about', url: '//www.html5rocks.com/en/tutorials/webcomponents/shadowdom/'},
+  {name: 'Resumé', hash: 'resume', url: '//www.html5rocks.com/en/tutorials/webcomponents/shadowdom-201/'},
+  {name: 'Blog', hash: 'blog', url: '//www.html5rocks.com/en/tutorials/webcomponents/shadowdom-301/'},
+  {name: 'Bookmarks', hash: 'bookmarks', url: '//www.html5rocks.com/en/tutorials/webcomponents/customelements/'}
 ];
 
 template.addEventListener('template-bound', function(e) {
+  scaffold = document.querySelector('#scaffold');
+  ajax = document.querySelector('#ajax');
+  pages = document.querySelector('#pages');
   var keys = document.querySelector('#keys');
 
   // Allow selecting pages by num keypad. Dynamically add
@@ -53,19 +57,40 @@ template.keyHandler = function(e, detail, sender) {
   }
 };
 
-template.cyclePages = function(e, detail, sender) {
-  // Click clicks should navigate and not cycle pages.
-  if (e.path[0].localName == 'a') {
-    return;
-  }
-
-  e.shiftKey ? sender.selectPrevious(true) : sender.selectNext(true);
-};
-
 template.menuItemSelected = function(e, detail, sender) {
   if (detail.isSelected) {
-    document.querySelector('#scaffold').closeDrawer();
+
+    // Need to wait one rAF so <core-ajax> has it's URL set.
+    this.async(function() {
+      if (!cache[ajax.url]) {
+        ajax.go();
+      }
+
+      scaffold.closeDrawer();
+    });
+
   }
+};
+
+template.ajaxLoad = function(e, detail, sender) {
+  e.preventDefault(); // prevent link navigation.
+};
+
+template.onResponse = function(e, detail, sender) {
+  var article = detail.response.querySelector('#article-content');
+
+  article.querySelector('.byline').remove();
+
+  // Fix up image paths to not be local.
+  [].forEach.call(article.querySelectorAll('img'), function(img) {
+    img.setAttribute('src', img.src);
+  });
+
+  var html = article.innerHTML;
+
+  cache[ajax.url] = html; // Primitive caching by URL.
+
+  this.injectBoundHTML(html, pages.selectedItem.firstElementChild);
 };
 
 })();
