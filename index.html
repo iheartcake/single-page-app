@@ -7,6 +7,8 @@
   <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
   <link rel="import" href="elements.html">
   <link rel="stylesheet" href="styles.css" shim-shadowdom>
+  <script src="//use.typekit.net/pvw5hkp.js"></script>
+  <script>try{Typekit.load();}catch(e){}</script>
 <!-- <base target="_blank"></base> -->
   <style>
     core-animated-pages > *  {
@@ -33,10 +35,9 @@
              on-core-response="{{onResponse}}"></core-ajax>
 
   <core-scaffold id="scaffold">
-
-    <nav>
+    <core-header-panel navigation flex mode="seamed">
       <core-toolbar>
-        <span>Rachel Cantor</span>
+        <div class="main-label"><h1>Rachel Cantor</h1></div>
       </core-toolbar>
       <core-menu valueattr="hash" selected="{{route}}" selectedModel="{{selectedPage}}"
                  on-core-select="{{menuItemSelected}}">
@@ -47,14 +48,11 @@
           </paper-item>
         </template>
       </core-menu>
-    </nav>
-
+    </core-header-panel>
     <core-toolbar tool flex>
       <div flex>{{selectedPage.page.name}}</div>
-      <core-icon-button icon="refresh"></core-icon-button>
-      <core-icon-button icon="add"></core-icon-button>
+      <core-icon-button icon="mail"></core-icon-button>
     </core-toolbar>
-
     <div layout horizontal center-center fit>
       <core-animated-pages id="pages" selected="{{route}}" valueattr="hash"
                            transitions="slide-from-right">
@@ -65,9 +63,7 @@
         </template>
       </core-animated-pages>
     </div>
-
   </core-scaffold>
-
 </template>
 
 <script src="app.js"></script>

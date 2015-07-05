@@ -8,6 +8,8 @@ core-animated-pages {
   height: 85%;
   -webkit-user-select: none;
   overflow: hidden;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  border-radius: 2px;
 }
 
 core-animated-pages > * {
@@ -17,13 +19,40 @@ core-animated-pages > * {
 }
 
 body /deep/ core-toolbar {
-  background-color: #03a9f4;
+  background-color: #1A237E;
   color: #fff;
+
 }
+.main-label {
+  padding: 0 0 20px 30px;
+  font-size: 1rem;
+  font-family: RobotoDraft, sans-serif;
+  font-weight: 300;
+
+}
+.main-label h1 {
+  font-family: "aw-conqueror-carved-one", sans-serif;
+  font-size: 1.3rem;
+  line-height: .8rem;
+}
+/* menu */
 
 core-menu {
-  color: #01579b;
+  color: #444;
   margin: 10px 0 0 0;
+}
+/* menu item */
+body /deep/ core-menu > paper-item {
+  height: 56px;
+  padding-left: 30px;
+  font-size: 15px;
+  color: #444;
+  font-weight: normal !important;
+}
+
+polyfill-next-selector { content: 'core-menu paper-item.core-selected'; }
+::content paper-item.core-selected {
+  background-color: #69F0AE;
 }
 
 core-menu > paper-item {
@@ -33,11 +62,12 @@ core-menu > paper-item {
 paper-item a {
   text-decoration: none;
   color: currentcolor;
+  font-family: aw-conqueror-carved-one, sans-serif;
   margin-left: 5px;
 }
 
 core-menu > paper-item.core-selected {
-  background: #e1f5fe;
+  background: #69F0AE;
 }
 
 @media all and (max-width: 480px) {
